@@ -16,6 +16,8 @@ Every file is small enough to read before you use it. Please do.
 | `packages/pnpm-workspace.yaml` | merge into yours | 7-day release age, fail when provenance disappears |
 | `packages/.yarnrc.yml` | merge into yours | 7-day release age, no third-party install scripts |
 | `packages/bunfig.toml` | merge into yours | 7-day release age |
+| `team/com.anthropic.claudecode.plist` | a Jamf (or Kandji) Custom Settings payload, domain `com.anthropic.claudecode` | Company-wide managed policy: no skip-permissions, sandbox on, no force push, no reading production env files or keys, deploys ask |
+| `team/managed-settings.json` | `/Library/Application Support/ClaudeCode/` on macOS, `/etc/claude-code/` on Linux | The same policy as a file |
 
 ## Install for one repo
 
@@ -56,6 +58,8 @@ Guides with the reasoning behind each file, as of November 2026:
 - [Stop Claude Code from deleting files or touching production](https://usecoral.app/guides/stop-claude-code-deleting-files)
 - [Claude Code sandbox: what it covers and what it doesn't](https://usecoral.app/guides/claude-code-sandbox)
 - [Keep AI coding agents from installing malicious npm packages](https://usecoral.app/guides/ai-agents-malicious-npm-packages)
+- [Claude Code managed settings: the complete guide, with Jamf](https://usecoral.app/guides/claude-code-managed-settings)
+- [Different Claude Code permissions per team or role](https://usecoral.app/guides/claude-code-permissions-per-team)
 
 ## License
 

@@ -1,0 +1,21 @@
+{
+    "sandbox": {
+        "enabled": true,
+        "allowUnsandboxedCommands": false
+    },
+    "permissions": {
+        "deny": [
+            "Read(./.env.production)",
+            "Read(~/.ssh/**)",
+            "Read(~/.aws/**)",
+            "Bash(git push --force *)",
+            "Bash(git push -f *)"
+        ],
+        "ask": [
+            "Bash(git push *)",
+            "Bash(vercel --prod *)",
+            "Bash(terraform apply *)"
+        ],
+        "disableBypassPermissionsMode": "disable"
+    }
+}

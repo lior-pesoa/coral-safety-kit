@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>permissions</key>
+  <dict>
+    <key>disableBypassPermissionsMode</key>
+    <string>disable</string>
+    <key>deny</key>
+    <array>
+      <string>Read(./.env.production)</string>
+      <string>Read(~/.ssh/**)</string>
+      <string>Read(~/.aws/**)</string>
+      <string>Bash(git push --force *)</string>
+      <string>Bash(git push -f *)</string>
+    </array>
+    <key>ask</key>
+    <array>
+      <string>Bash(git push *)</string>
+      <string>Bash(vercel --prod *)</string>
+      <string>Bash(terraform apply *)</string>
+    </array>
+  </dict>
+  <key>sandbox</key>
+  <dict>
+    <key>enabled</key>
+    <true/>
+    <key>allowUnsandboxedCommands</key>
+    <false/>
+  </dict>
+</dict>
+</plist>
