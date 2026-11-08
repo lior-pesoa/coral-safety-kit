@@ -19,6 +19,13 @@ Every file is small enough to read before you use it. Please do.
 | `team/com.anthropic.claudecode.plist` | a Jamf (or Kandji) Custom Settings payload, domain `com.anthropic.claudecode` | Company-wide managed policy: no skip-permissions, sandbox on, no force push, no reading production env files or keys, deploys ask |
 | `team/managed-settings.json` | `/Library/Application Support/ClaudeCode/` on macOS, `/etc/claude-code/` on Linux | The same policy as a file |
 
+## Free tools
+
+- [Roles builder](https://usecoral.app/tools/roles): set Allow, Ask or Block per role and download Claude Code managed settings, a Jamf profile per role and Codex `requirements.toml`.
+- [Settings checker](https://usecoral.app/tools/settings-check): paste a `settings.json` and see what's risky.
+
+Both run in your browser.
+
 ## Install for one repo
 
 ```bash
