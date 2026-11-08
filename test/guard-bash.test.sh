@@ -76,5 +76,8 @@ check allow feature-repo 'psql -c "DELETE FROM sessions WHERE expires_at < now()
 check allow feature-repo 'npm test'
 check allow feature-repo 'grep -rn "rm -rf" docs'
 
+# fail closed: input the hook can't read is blocked (exit 2), never allowed
+printf 'not json' | "$hook" 2>/dev/null; [ $? -eq 2 ] && pass=$((pass + 1)) || { fail=$((fail + 1)); echo "FAIL: unreadable input was not blocked"; }
+
 echo "$pass passed, $fail failed"
 [ "$fail" -eq 0 ]

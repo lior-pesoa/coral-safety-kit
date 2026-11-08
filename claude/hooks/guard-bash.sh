@@ -12,9 +12,17 @@
 
 set -u
 
+# Fail closed: a safety hook that can't read the command must not let it through.
+if ! command -v jq >/dev/null 2>&1; then
+  echo "coral-safety-kit: jq is not installed, so this command was blocked. Install jq (apt install jq / brew install jq)." >&2
+  exit 2
+fi
 input=$(cat)
-cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // empty')
-cwd=$(printf '%s' "$input" | jq -r '.cwd // empty')
+if ! cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // empty' 2>/dev/null); then
+  echo "coral-safety-kit: couldn't read the hook input, so this command was blocked." >&2
+  exit 2
+fi
+cwd=$(printf '%s' "$input" | jq -r '.cwd // empty' 2>/dev/null)
 [ -z "$cmd" ] && exit 0
 
 # Print Claude Code's PreToolUse answer and stop.
@@ -25,7 +33,7 @@ decide() {
 }
 
 # One line per shell command: split on ; && || | and newlines, so `cd x && rm -rf y` checks both.
-segments=$(printf '%s\n' "$cmd" | sed -E 's/(\&\&|\|\||;|\|)/\n/g')
+segments=$(printf '%s\n' "$cmd" | awk '{ gsub(/&&|\|\||;|\|/, "\n"); print }')
 
 # Folders that are safe to delete because a build or install recreates them.
 rebuildable='^(\./)?(node_modules|dist|build|out|\.next|\.turbo|\.cache|coverage|target|tmp|\.pytest_cache|__pycache__)/?$'
@@ -57,7 +65,8 @@ while IFS= read -r seg; do
       decide deny "Blocked by coral-safety-kit: force push. Push a new branch and open a pull request."
     printf '%s' "$seg" | grep -Eq '[[:space:]](main|master)([[:space:]]|$)|:(main|master)([[:space:]]|$)' &&
       decide deny "Blocked by coral-safety-kit: push to main or master. Push a branch and open a pull request."
-    branch=$(git -C "${cwd:-.}" rev-parse --abbrev-ref HEAD 2>/dev/null)
+# fsmonitor off, so a hostile repo's git config can't make this check run a program
+    branch=$(git -c core.fsmonitor=false -C "${cwd:-.}" rev-parse --abbrev-ref HEAD 2>/dev/null)
     if [ "$branch" = "main" ] || [ "$branch" = "master" ]; then
       printf '%s' "$seg" | grep -Eq '^git([[:space:]]+-C[[:space:]]+[^[:space:]]+)?[[:space:]]+push([[:space:]]+(-u|--set-upstream))?([[:space:]]+origin)?[[:space:]]*$' &&
         decide deny "Blocked by coral-safety-kit: this push goes to $branch. Create a branch first."
