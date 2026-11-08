@@ -1,0 +1,11 @@
+# coral-safety-kit · pnpm settings (pnpm 10.16 and later; merge into your pnpm-workspace.yaml)
+
+# Only resolve versions published at least 7 days ago. In minutes. pnpm 11 defaults to 1 day.
+minimumReleaseAge: 10080
+
+# Fail if a package loses the provenance it used to have (a sign of a stolen token). pnpm 10.21+.
+trustPolicy: no-downgrade
+
+# pnpm 10+ doesn't run dependency build scripts unless you allow them. In pnpm 11, list them here:
+# allowBuilds:
+#   esbuild: true

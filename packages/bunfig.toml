@@ -1,0 +1,5 @@
+# coral-safety-kit · Bun settings (merge into your bunfig.toml)
+
+[install]
+# Only install versions published at least 7 days ago. In seconds.
+minimumReleaseAge = 604800
